@@ -9,7 +9,7 @@ class GraphvizPass(Pass):
 
     def __init__(self, input_ir: ast.AstNode, prior: Optional[Pass] = None) -> None:
         """Initialize Graphviz Pass."""
-        self.output_file = "examples/viz/function_ast.dot"
+        self.output_file = "examples/viz/function_2decs_ast.dot"
         self.node_counter = 0
         self.node_map = {}  # Maps nodes to unique IDs for DOT
         self.dot_lines = ["digraph G {"]  # Start of the DOT format
@@ -44,6 +44,10 @@ class GraphvizPass(Pass):
         node_name = getattr(node, "name", None)
         node_name_str = node_name.value if hasattr(node_name, "value") else str(node_name)
 
+        if node_type == "Name":
+            print("FOUND NAME")
+            print(f"name: {node.name}, value: {node.value}, endline: {node.end_line}")
+
         # Create a label for visualization
         return f"{node_type}\\n{node_name_str}" if node_name else node_type
 
@@ -64,4 +68,4 @@ class GraphvizPass(Pass):
 
 
 # visualize after running the pass: (bash)
-# dot -Tpng examples/viz/simple.dot -o examples/viz/simple_ast.png
+# dot -Tpng examples/viz/function_2decs_ast.dot -o examples/viz/function_2decs_ast.png
