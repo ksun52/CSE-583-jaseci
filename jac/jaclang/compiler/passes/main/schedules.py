@@ -21,7 +21,13 @@ from .registry_pass import RegistryPass  # noqa: I100
 from .access_modifier_pass import AccessCheckPass  # noqa: I100
 from .py_collect_dep_pass import PyCollectDepsPass  # noqa: I100
 
+# added passes for messing around
+from .printer_pass import PrinterPass
+from .graph_viz_pass import GraphvizPass
+
 py_code_gen = [
+    PrinterPass,
+    GraphvizPass,
     SubNodeTabPass,
     JacImportPass,
     SymTabBuildPass,
