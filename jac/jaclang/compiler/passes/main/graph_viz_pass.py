@@ -9,7 +9,7 @@ class GraphvizPass(Pass):
 
     def __init__(self, input_ir: ast.AstNode, prior: Optional[Pass] = None) -> None:
         """Initialize Graphviz Pass."""
-        self.output_file = "examples/viz/simple.dot"
+        self.output_file = "examples/viz/function_ast.dot"
         self.node_counter = 0
         self.node_map = {}  # Maps nodes to unique IDs for DOT
         self.dot_lines = ["digraph G {"]  # Start of the DOT format
@@ -64,4 +64,4 @@ class GraphvizPass(Pass):
 
 
 # visualize after running the pass: (bash)
-# dot -Tpng examples/viz/simple_ast.dot -o examples/viz/simple_ast.png
+# dot -Tpng examples/viz/simple.dot -o examples/viz/simple_ast.png
