@@ -1,11 +1,8 @@
-import:py codon;
-
 can do_nothing() -> None {
     print("tester function");
 }
 
-@do_nothing
-@do_nothing
+@codon.jit
 can sum(a: int, b: int) -> int {
     return a + b;
 }

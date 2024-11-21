@@ -42,7 +42,8 @@ class GraphvizPass(Pass):
 
         # Attempt to extract a name if possible
         node_name = getattr(node, "name", None)
-        node_name_str = node_name.value if hasattr(node_name, "value") else str(node_name)
+        node_name_str = node.value.strip('"') if getattr(node, "value", None) else str(node_name)
+        # node.value.strip('"') Gets rid of double quotes if value is a string
 
         if node_type == "Name":
             print("FOUND NAME")
