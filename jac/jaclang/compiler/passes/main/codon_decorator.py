@@ -17,15 +17,15 @@ class CodonDecoratorPass(Pass):
             if not node.decorators:
                 print("adding codon decorator")
                 node.decorators = ast.SubNodeList(
-                    items=[codon_decorator],
+                    items=[codon_decorator], # adds to py file
                     delim=Tok.DECOR_OP, 
-                    kid=[node.gen_token(Tok.DECOR_OP), codon_decorator]
+                    kid=[node.gen_token(Tok.DECOR_OP), codon_decorator] #
                 )
                 print(node.decorators)
-                node.add_kids_left([node.decorators])
+                node.add_kids_left([node.decorators]) # add decorators to tree
             else:
-                node.decorators.items.append(codon_decorator)
-                node.decorators.add_kids_left([codon_decorator])
+                node.decorators.items.insert(0, codon_decorator)
+                node.decorators.add_kids_left([node.gen_token(Tok.DECOR_OP), codon_decorator])
 
     def is_statically_typed(self, node: ast.Ability) -> bool:
         """Check if function has full type annotations."""
