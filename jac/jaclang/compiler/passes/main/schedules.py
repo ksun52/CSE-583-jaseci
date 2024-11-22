@@ -24,9 +24,11 @@ from .py_collect_dep_pass import PyCollectDepsPass  # noqa: I100
 # added passes for messing around
 from .printer_pass import PrinterPass
 from .graph_viz_pass import GraphvizPass
+from .codon_decorator import CodonDecoratorPass
 
 py_code_gen = [
     PrinterPass,
+    CodonDecoratorPass,
     GraphvizPass,
     SubNodeTabPass,
     JacImportPass,
