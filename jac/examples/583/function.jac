@@ -1,3 +1,5 @@
+import:py codon;
+
 can do_nothing() -> None {
     print("tester function");
 }

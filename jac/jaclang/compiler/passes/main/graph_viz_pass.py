@@ -42,12 +42,16 @@ class GraphvizPass(Pass):
 
         # Attempt to extract a name if possible
         node_name = getattr(node, "name", None)
-        node_name_str = node.value.strip('"') if getattr(node, "value", None) else str(node_name)
+        # print("extracting name from", node.value)
+        try:
+            node_name_str = node.value.strip('"') if getattr(node, "value", None) else str(node_name)
+        except BaseException:
+            node_name_str = str(node_name)
         # node.value.strip('"') Gets rid of double quotes if value is a string
 
-        if node_type == "Name":
-            print("FOUND NAME")
-            print(f"name: {node.name}, value: {node.value}, endline: {node.end_line}")
+        # if node_type == "Name":
+        #     print("FOUND NAME")
+        #     print(f"name: {node.name}, value: {node.value}, endline: {node.end_line}")
 
         # Create a label for visualization
         return f"{node_type}\\n{node_name_str}" if node_name else node_type
