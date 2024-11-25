@@ -29,8 +29,8 @@ from .codon_import_pass import CodonImportPass
 
 py_code_gen = [
     PrinterPass,
-    # CodonImportPass,
-    # CodonDecoratorPass,
+    CodonImportPass,
+    CodonDecoratorPass,
     GraphvizPass,
     SubNodeTabPass,
     JacImportPass,
