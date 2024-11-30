@@ -26,11 +26,13 @@ from .printer_pass import PrinterPass
 from .graph_viz_pass import GraphvizPass
 from .codon_decorator import CodonDecoratorPass
 from .codon_import_pass import CodonImportPass
+from .codon_pass import CodonCheckPass
 
 py_code_gen = [
     PrinterPass,
     CodonImportPass,
     CodonDecoratorPass,
+    CodonCheckPass,
     GraphvizPass,
     SubNodeTabPass,
     JacImportPass,

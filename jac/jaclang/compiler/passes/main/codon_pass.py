@@ -7,24 +7,26 @@ from typing import List, Set
 # THIS IS OUTLINE, NEED TO CHECKo
 
 
-class CodonDecoratorPass(Pass):
+class CodonCheckPass(Pass):
     """Adds @codon.jit decorator to eligible statically typed functions."""
 
     def enter_ability(self, node: ast.Ability) -> None:
         """Process each ability (function) node."""
         # Skip if function is part of an architype
         if isinstance(node.parent.parent, ast.Architype):
-            return
+            print(f"found an instance of architype: {node.py_resolve_name()}")
+            
 
         # Skip if not statically typed
         if not self.is_statically_typed(node):
             return
 
-        # Collect information about function scope
+        # Collect information about function scope -------------------------------------
         scope_info = self.analyze_function_scope(node)
-        
         if not scope_info['is_eligible']:
+            print(f"function scope NOT eligible: {node.py_resolve_name()}")
             return
+        # ------------------------------------------------------------------------------
 
         # Create decorator with pyvars if needed
         codon_decorator = self.create_codon_decorator(scope_info['global_refs'])
