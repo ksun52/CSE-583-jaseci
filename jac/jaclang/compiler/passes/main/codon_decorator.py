@@ -8,20 +8,78 @@ from jaclang.compiler.constant import Tokens as Tok
 class CodonDecoratorPass(Pass):
     """Adds @codon.jit decorator to statically typed functions."""
 
+    def enter_module(self, node: ast.Module) -> None:
+        """Add import:py codon statement."""
+        tag=ast.Name(
+                    orig_src=self.ir.source,
+                    name=ast.Tok.NAME, 
+                    value="py",
+                    line=0, end_line=0,
+                    col_start=0, col_end=0,
+                    pos_start=0, pos_end=0
+                )
+
+        codon=ast.Name(
+                    orig_src=self.ir.source,
+                    name=Tok.NAME,
+                    value="codon",
+                    line=0, end_line=0, 
+                    col_start=0, col_end=0,
+                    pos_start=0, pos_end=0
+                )
+
+        modulePath=ast.ModulePath(
+                    path=[codon],
+                    level=0,
+                    alias=None,
+                    kid=[codon]
+                )
+
+        subnodeList=ast.SubNodeList(
+                items=[modulePath],
+                delim=Tok.COMMA,
+                kid=[modulePath]
+            )
+
+        subtag=ast.SubTag(
+                tag=tag,
+                kid=[node.gen_token(Tok.COLON), tag]
+            )
+
+        semi = ast.Semi(
+            orig_src=self.ir.source,
+            name=Tok.SEMI,
+            value=";",
+            line=0, end_line=0,
+            col_start=0, col_end=0,
+            pos_start=0, pos_end=0
+        )
+
+        import_stmt = ast.Import(
+            hint=subtag,
+            from_loc=None,
+            items=subnodeList,
+            is_absorb=False,
+            kid=[node.gen_token(Tok.KW_IMPORT), subtag, subnodeList, semi]
+        )
+
+        node.body.insert(0, import_stmt)
+        node.add_kids_left([import_stmt])
+
+
     def enter_ability(self, node: ast.Ability) -> None:
         """Process each ability node."""
         if self.is_statically_typed(node):
-            print("in codon generator")
             codon_decorator = self.create_codon_decorator()
-            print("made codon decorator")
+
             if not node.decorators:
-                print("adding codon decorator")
+
                 node.decorators = ast.SubNodeList(
                     items=[codon_decorator], # adds to py file
                     delim=Tok.DECOR_OP, 
                     kid=[node.gen_token(Tok.DECOR_OP), codon_decorator] #
                 )
-                print(node.decorators)
+
                 node.add_kids_left([node.decorators]) # add decorators to tree
             else:
                 node.decorators.items.insert(0, codon_decorator)
@@ -76,11 +134,10 @@ class CodonDecoratorPass(Pass):
                 col_start=0, col_end=0,
                 pos_start=0, pos_end=0
             )
-        return ast.AtomTrailer(
+        return  ast.AtomTrailer(
             target=target,
             right=right,
             is_attr=True,
             is_null_ok=False,
             kid=[target, period, right]
-            # TODO: Make the attr and kid stuff is correct
         )
