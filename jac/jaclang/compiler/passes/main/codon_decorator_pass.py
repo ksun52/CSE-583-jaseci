@@ -89,7 +89,6 @@ class CodonDecoratorPass(Pass):
         """Process each ability node."""
         # Skip if function is part of an architype
         if isinstance(node.parent.parent, ast.Architype):
-            print(f"found an instance of architype: {node.py_resolve_name()}")
             return
         
         # Collect information about function scope -------------------------------------
@@ -129,10 +128,17 @@ class CodonDecoratorPass(Pass):
         def visit(n: ast.AstNode) -> None:
             if isinstance(n, ast.Assignment):
                 # Check if assignment modifies anything non-local
-                for target in n.target.items:
+                for target in n.kid:
                     if isinstance(target, ast.AtomTrailer):
                         result['writes_nonlocal'] = True
                         return
+                    if isinstance(target, ast.SubNodeList):
+                        for target_child in target.kid:
+                            if isinstance(target_child, ast.Name) and target_child.value in self.module_globals:
+                                result['writes_nonlocal'] = True
+                                return
+                    
+            # ADD GLOBAL ASSIGNMENT
 
             elif isinstance(n, ast.Name):
                 # Track global names used
